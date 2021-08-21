@@ -16,23 +16,23 @@ from linebot.models import (
 )
 
 app = Flask(__name__)
-# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
-# db = SQLAlchemy(app)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+db = SQLAlchemy(app)
 
 line_bot_api = LineBotApi(os.environ.get('LINEAPI'))
 handler = WebhookHandler(os.environ.get('HANDLER'))
 
 
-# class TrainData(db.Model):
-#     name = db.Column(db.String(80))
-#     info = db.Column(db.String(200))
+class TrainData(db.Model):
+    name = db.Column(db.String(80))
+    info = db.Column(db.String(200))
 
-#     def __init__(self, name, info):
-#         self.name = name
-#         self.info = info
+    def __init__(self, name, info):
+        self.name = name
+        self.info = info
 
-#     def __repr__(self):
-#         return '<Train %r>' % self.name
+    def __repr__(self):
+        return '<Train %r>' % self.name
 
 
 @app.route('/')

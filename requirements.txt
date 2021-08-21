@@ -4,4 +4,5 @@ requests
 bs4
 line-bot-sdk
 flask_sqlalchemy
+sqlalchemy
 psycopg2

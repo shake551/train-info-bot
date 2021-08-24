@@ -24,16 +24,10 @@ handler = WebhookHandler(os.environ.get('HANDLER'))
 
 
 class TrainData(db.Model):
+    __tablename__ = 'train'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
     info = db.Column(db.String(200))
-
-    def __init__(self, name, info):
-        self.name = name
-        self.info = info
-
-    def __repr__(self):
-        return '<Train %r>' % self.name
 
 
 @app.route('/')

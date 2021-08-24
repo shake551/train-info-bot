@@ -16,7 +16,8 @@ from linebot.models import (
 )
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
+    'HEROKU_POSTGRESQL_GRAY_URL')
 db = SQLAlchemy(app)
 
 line_bot_api = LineBotApi(os.environ.get('LINEAPI'))

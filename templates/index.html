@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>電車の運行状況</title>
+</head>
+<body>
+  {% for data in train_data %}
+  <p>
+    <h2>{{data[0]}}</h2>
+    {{data[1]}}
+  </p>
+  {% endfor %}
+</body>
+</html>

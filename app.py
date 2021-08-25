@@ -117,9 +117,14 @@ def sc():
             return_text += '\n' + \
                 str(data[0]) + '\n' + \
                 str(data[1])
+            train_info = TrainData()
+            train_info.name = data[0]
+            train_info.info = data[1]
+            db.session.add(train_info)
+            db.session.commit()
 
-    db.session.add_all(return_data)
-    db.session.commit()
+    # db.session.add_all(return_data)
+    # db.session.commit()
 
     return return_text
 

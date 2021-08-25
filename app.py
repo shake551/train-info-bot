@@ -87,6 +87,7 @@ TRAIN_NAME = [
     # 伊賀鉄道
     '伊賀鉄道線']
 
+
 return_text = 'トラブルのある路線'
 URL = 'https://transit.yahoo.co.jp/traininfo/area/6/'
 html = requests.get(URL)
@@ -98,6 +99,7 @@ data = []
 return_data = []
 
 db.session.query(TrainData).delete()
+db.session.commit()
 
 for info in info_map:
     flag += 1
@@ -128,6 +130,7 @@ def test():
 @app.route('/sc')
 def sc():
     db.session.query(TrainData).delete()
+    db.session.commit()
 
     return 'delete'
 

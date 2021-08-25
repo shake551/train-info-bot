@@ -129,7 +129,7 @@ def test():
 def sc():
     db.session.query(TrainData).delete()
 
-    return return_text
+    return 'delete'
 
 
 @app.route('/sc-data')

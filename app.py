@@ -164,7 +164,7 @@ def handle_message(event):
     line_name = event.message.text
     name_list = [x for x in TRAIN_NAME if line_name in x]
     if line_name == 'トラブル':
-        all_data = TrainData.query().all()
+        all_data = TrainData.query.all()
         if len(all_data) == 0:
             return_text = '現在通常運転でない路線はありません．'
         else:

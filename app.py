@@ -17,7 +17,7 @@ from linebot.models import (
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
-    'HEROKU_POSTGRESQL_GRAY_URL')
+    'HEROKU_DB')
 db = SQLAlchemy(app)
 
 line_bot_api = LineBotApi(os.environ.get('LINEAPI'))
@@ -29,7 +29,8 @@ class TrainData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
     info = db.Column(db.String(200))
-    
+
+
 TRAIN_NAME = [
     # JR西日本
     '大阪環状線', 'JRゆめ咲線', 'JR宝塚線', '琵琶湖線', 'JR京都線', '湖西線', '草津線', '嵯峨野線', '学研都市線', 'JR東西線', 'JR神戸線', '阪和線', '紀勢本線', '羽衣線', '大和路線', '関西本線', '奈良線', '桜井線', '和歌山線', '関西空港線', '和田岬線', 'きのくに線', '加古川線', '播但線', '舞鶴線', '小浜線', '福知山線', '山陰本線', 'おおさか東線',
@@ -91,6 +92,7 @@ TRAIN_NAME = [
 def test():
     return 'hello flask'
 
+
 @app.route('/sc')
 def sc():
     return_text = 'トラブルのある路線'
@@ -115,16 +117,17 @@ def sc():
             return_text += '\n' + \
                 str(data[0]) + '\n' + \
                 str(data[1])
-                
+
     db.session.add_all(return_data)
     db.session.commit()
-                
+
     return return_text
+
 
 @app.route('/sc-data')
 def sc_data():
     train_data = TrainData.query.all()
-    
+
     return render_template('sc_data.html', train_data=train_data)
 
 

@@ -127,6 +127,8 @@ def sc():
             train_info.info = data[2]
             db.session.add(train_info)
             db.session.commit()
+    
+    print('scraping')
 
     return return_text
 

@@ -102,9 +102,11 @@ def sc():
     train_map = soup.find('div', class_='elmTblLstLine')
     info_map = train_map.find_all('td')
     flag = 0
-    i = 0
     data = []
     return_data = []
+
+    db.session.query(TrainData).delete()
+
     for info in info_map:
         flag += 1
         if flag % 3 == 1:
@@ -113,18 +115,17 @@ def sc():
             line_html = requests.get(line_url)
             line_soup = BeautifulSoup(line_html.content, 'html.parser')
             line_info = line_soup.find('dd', class_='trouble')
-            data = [info.text, line_info.text[:17].strip()]
+            data = [len(return_data), info.text, line_info.text[:17].strip()]
             return_data.append(data)
             return_text += '\n' + \
                 str(data[0]) + '\n' + \
                 str(data[1])
             train_info = TrainData()
-            train_info.id = i
-            train_info.name = data[0]
-            train_info.info = data[1]
+            train_info.id = data[0]
+            train_info.name = data[1]
+            train_info.info = data[2]
             db.session.add(train_info)
             db.session.commit()
-            i += 1
 
     # db.session.add_all(return_data)
     # db.session.commit()

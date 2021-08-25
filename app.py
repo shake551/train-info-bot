@@ -226,5 +226,5 @@ def handle_message(event):
 
 
 if __name__ == "__main__":
-    sc()
     app.run()
+    sc()

@@ -118,8 +118,8 @@ def sc():
             data = [len(return_data), info.text, line_info.text[:17].strip()]
             return_data.append(data)
             return_text += '\n' + \
-                str(data[0]) + '\n' + \
-                str(data[1])
+                str(data[1]) + '\n' + \
+                str(data[2])
             train_info = TrainData()
             train_info.id = data[0]
             train_info.name = data[1]

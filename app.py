@@ -107,7 +107,6 @@ def sc():
     return_data = []
 
     db.session.query(TrainData).delete()
-    db.session.commit()
 
     for info in info_map:
         flag += 1

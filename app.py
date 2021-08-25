@@ -161,51 +161,24 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    URL = 'https://transit.yahoo.co.jp/traininfo/area/6/'
-    html = requests.get(URL)
-    soup = BeautifulSoup(html.content, 'html.parser')
-    train_map = soup.find('div', class_='elmTblLstLine')
-    info_map = train_map.find_all('td')
-    flag = 0
-    data = []
-    return_data = []
-    line_data = []
-    for info in info_map:
-        flag += 1
-        if flag % 3 == 1:
-            link = info.find('a')
-            data = [info.text, link.get('href')]
-            return_data.append(data)
-            line_data.append(data[0])
     line_name = event.message.text
     name_list = [x for x in TRAIN_NAME if line_name in x]
     if line_name == 'トラブル':
-        if len(line_data) == 0:
+        all_data = TrainData.query().all()
+        if len(all_data) == 0:
             return_text = '現在通常運転でない路線はありません．'
         else:
             return_text = '現在通常運転ではない路線の情報をお知らせします．\n'
-            for i in range(len(line_data)):
-                line_url = return_data[i][1]
-                line_html = requests.get(line_url)
-                line_soup = BeautifulSoup(line_html.content, 'html.parser')
-                line_info = line_soup.find('dd', class_='trouble')
-                return_text += '\n' + \
-                    str(line_data[i]) + '\n' + \
-                    str(line_info.text[:-17].strip())
+            for data in all_data:
+                return_text += '\n<' + data.name + '>\n' + data.info
             return_text += '\n\n通常運転でない路線は以上です．'
     elif len(name_list) != 0:
         length = len(name_list)
         return_text = '運行状況をお知らせします．\n'
         for i in range(length):
-            if name_list[i] in line_data:
-                num = line_data.index(name_list[i])
-                line_url = return_data[num][1]
-                line_html = requests.get(line_url)
-                line_soup = BeautifulSoup(line_html.content, 'html.parser')
-                line_info = line_soup.find('dd', class_='trouble')
-                return_text += '\n' + \
-                    str(name_list[i]) + '\n' + \
-                    str(line_info.text[:-17].strip())
+            data = db.session.query(TrainData).filter(TrainData.name == name_list[i]).first()
+            if (data):
+                return_text += '\n<' + data.name + '>\n' + data.info
             else:
                 if len(name_list[i]) >= 11:
                     return_text += '\n' + str(name_list[i]) + '\n   通常運転'

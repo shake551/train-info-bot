@@ -137,7 +137,7 @@ def sc():
 def sc_data():
     train_data = TrainData.query.all()
 
-    return render_template('sc_data.html', train_data=train_data)
+    return render_template('templates/sc_data.html', train_data=train_data)
 
 
 @app.route("/callback", methods=['POST'])

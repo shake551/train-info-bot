@@ -121,7 +121,7 @@ for info in info_map:
         train_info.info = data[2]
         db.session.add(train_info)
         db.session.commit()
-
+print('end')
 
 @app.route('/')
 def test():

@@ -170,7 +170,7 @@ def handle_message(event):
         else:
             return_text = '現在通常運転ではない路線の情報をお知らせします．\n'
             for data in all_data:
-                return_text += '\n<' + data.name + '>\n' + data.info
+                return_text += '\n<' + data.name + '>\n' + data.info + '\n'
             return_text += '\n\n通常運転でない路線は以上です．'
     elif len(name_list) != 0:
         length = len(name_list)
@@ -178,13 +178,10 @@ def handle_message(event):
         for i in range(length):
             data = db.session.query(TrainData).filter(TrainData.name == name_list[i]).first()
             if (data):
-                return_text += '\n<' + data.name + '>\n' + data.info
+                return_text += '\n<' + data.name + '>\n' + data.info + '\n'
             else:
-                if len(name_list[i]) >= 11:
-                    return_text += '\n' + str(name_list[i]) + '\n   通常運転'
-                else:
-                    return_text += '\n' + \
-                        str(name_list[i]).ljust(10, '　') + '通常運転'
+                return_text += '\n<' + str(name_list[i]) + '>\n   通常運転\n'
+                
         return_text += '\n\nお問い合わせの路線の運行状況は以上の通りです．'
     else:
         if line_name == 'リスト':

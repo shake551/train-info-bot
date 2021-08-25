@@ -102,6 +102,7 @@ def sc():
     train_map = soup.find('div', class_='elmTblLstLine')
     info_map = train_map.find_all('td')
     flag = 0
+    i = 0
     data = []
     return_data = []
     for info in info_map:
@@ -118,10 +119,12 @@ def sc():
                 str(data[0]) + '\n' + \
                 str(data[1])
             train_info = TrainData()
+            train_info.id = i
             train_info.name = data[0]
             train_info.info = data[1]
             db.session.add(train_info)
             db.session.commit()
+            i += 1
 
     # db.session.add_all(return_data)
     # db.session.commit()

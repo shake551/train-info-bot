@@ -135,7 +135,7 @@ def sc():
 
 @app.route('/sc-data')
 def sc_data():
-    train_data = db.session.query(TrainData).all()
+    train_data = TrainData.query.all()
 
     return render_template('sc_data.html', train_data=train_data)
 

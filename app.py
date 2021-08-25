@@ -115,7 +115,7 @@ def sc():
             line_html = requests.get(line_url)
             line_soup = BeautifulSoup(line_html.content, 'html.parser')
             line_info = line_soup.find('dd', class_='trouble')
-            data = [len(return_data), info.text, line_info.text[:17].strip()]
+            data = [len(return_data), info.text, line_info.text[:-17].strip()]
             return_data.append(data)
             return_text += '\n' + \
                 str(data[1]) + '\n' + \

@@ -4,6 +4,8 @@ import requests
 from bs4 import BeautifulSoup
 
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
 from linebot import (
     LineBotApi, WebhookHandler

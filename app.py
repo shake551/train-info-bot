@@ -93,8 +93,8 @@ def set_delay_data():
     
     for i in range(len(delay_info)):
         new_info = TrainData()
-        new_info.name = delay_info['name']
-        new_info.info = delay_info['info']
+        new_info.name = delay_info[i]['name']
+        new_info.info = delay_info[i]['info']
         db.session.add(new_info)
     db.session.commit()
     

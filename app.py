@@ -131,7 +131,7 @@ def handle_message(event):
     name_list = [x for x in TRAIN_NAME if line_name in x]
     if line_name == 'トラブル':
         query_data = TrainData.query.all()
-        res = create_reply(query_data)
+        res = json.loads(create_reply(query_data))
         reply_text = res['reply_text']
 
     elif len(name_list) != 0:

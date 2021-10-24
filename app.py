@@ -4,6 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 
 import os
+import json
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -17,20 +18,13 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
-    'HEROKU_DB')
-db = SQLAlchemy(app)
+from config.config import db, app
+from models.train import TrainData
+from controller import obtain_train_data
+
 
 line_bot_api = LineBotApi(os.environ.get('LINEAPI'))
 handler = WebhookHandler(os.environ.get('HANDLER'))
-
-
-class TrainData(db.Model):
-    __tablename__ = 'train'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80))
-    info = db.Column(db.String(200))
 
 
 TRAIN_NAME = [
@@ -90,56 +84,25 @@ TRAIN_NAME = [
     '伊賀鉄道線']
 
 
+def set_delay_data():
+    res = json.loads(obtain_train_data())
+    delay_info = res['delay_info']
+    # 一旦データを全て消す
+    db.session.query(TrainData).delete()
+    
+    for i in range(len(delay_info)):
+        new_info = TrainData()
+        new_info.name = delay_info['name']
+        new_info.info = delay_info['info']
+        db.session.add(new_info)
+    db.session.commit()
+    
+    return json.dumps({'message':'ok'}, indent=2, ensure_ascii=False)
+
 
 @app.route('/')
 def test():
     return 'hello flask'
-
-
-@app.route('/sc')
-def sc():
-    return_text = 'トラブルのある路線'
-    URL = 'https://transit.yahoo.co.jp/traininfo/area/6/'
-    html = requests.get(URL)
-    soup = BeautifulSoup(html.content, 'html.parser')
-    train_map = soup.find('div', class_='elmTblLstLine')
-    info_map = train_map.find_all('td')
-    flag = 0
-    data = []
-    return_data = []
-
-    db.session.query(TrainData).delete()
-
-    for info in info_map:
-        flag += 1
-        if flag % 3 == 1:
-            link = info.find('a')
-            line_url = link.get('href')
-            line_html = requests.get(line_url)
-            line_soup = BeautifulSoup(line_html.content, 'html.parser')
-            line_info = line_soup.find('dd', class_='trouble')
-            data = [len(return_data), info.text, line_info.text[:-17].strip()]
-            return_data.append(data)
-            return_text += '\n' + \
-                str(data[1]) + '\n' + \
-                str(data[2])
-            train_info = TrainData()
-            train_info.id = data[0]
-            train_info.name = data[1]
-            train_info.info = data[2]
-            db.session.add(train_info)
-            db.session.commit()
-    
-    print('scraping')
-
-    return return_text
-
-
-@app.route('/sc-data')
-def sc_data():
-    train_data = TrainData.query.all()
-
-    return render_template('sc_data.html', train_data=train_data)
 
 
 @app.route("/callback", methods=['POST'])

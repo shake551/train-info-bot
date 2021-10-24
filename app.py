@@ -21,6 +21,7 @@ from linebot.models import (
 from config.config import db, app
 from models.train import TrainData
 from controller import obtain_train_data
+from controller import create_reply
 
 
 line_bot_api = LineBotApi(os.environ.get('LINEAPI'))
@@ -123,20 +124,15 @@ def callback():
 
     return 'OK'
 
-
+# LINEbotにメッセージが来たときの処理
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     line_name = event.message.text
     name_list = [x for x in TRAIN_NAME if line_name in x]
     if line_name == 'トラブル':
-        all_data = TrainData.query.all()
-        if len(all_data) == 0:
-            return_text = '現在通常運転でない路線はありません．'
-        else:
-            return_text = '現在通常運転ではない路線の情報をお知らせします．\n'
-            for data in all_data:
-                return_text += '\n<' + data.name + '>\n' + data.info + '\n'
-            return_text += '\n\n通常運転でない路線は以上です．'
+        query_data = TrainData.query.all()
+        create_reply(query_data)
+
     elif len(name_list) != 0:
         length = len(name_list)
         return_text = '運行状況をお知らせします．\n'
@@ -148,13 +144,14 @@ def handle_message(event):
                 return_text += '\n<' + str(name_list[i]) + '>\n   通常運転\n'
                 
         return_text += '\n\nお問い合わせの路線の運行状況は以上の通りです．'
+
+    elif line_name == 'リスト':
+        return_text = '対応している路線の一覧\n'
+        for name in TRAIN_NAME:
+            return_text += '\n' + str(name)
+
     else:
-        if line_name == 'リスト':
-            return_text = '対応している路線の一覧\n'
-            for name in TRAIN_NAME:
-                return_text += '\n' + str(name)
-        else:
-            return_text = 'データにそのような路線はありません．\n運行情報が知りたい路線の名前を送信してください．\nどの路線に対応しているか知りたい場合は「リスト」と送信すると一覧が表示されます．\nまた、「トラブル」と送信すると通常運転ではない路線をお知らせします．'
+        return_text = 'データにそのような路線はありません．\n運行情報が知りたい路線の名前を送信してください．\nどの路線に対応しているか知りたい場合は「リスト」と送信すると一覧が表示されます．\nまた、「トラブル」と送信すると通常運転ではない路線をお知らせします．'
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=return_text))

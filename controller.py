@@ -30,6 +30,7 @@ def obtain_train_data():
     
     return json.dumps(res_json, indent=2, ensure_ascii=False)
 
+# クエリデータからリプライメッセージを生成する
 def create_reply(query_data):
     if len(query_data) == 0:
         return_text = '現在通常運転でない路線はありません．'

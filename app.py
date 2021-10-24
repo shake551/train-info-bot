@@ -131,30 +131,31 @@ def handle_message(event):
     name_list = [x for x in TRAIN_NAME if line_name in x]
     if line_name == 'トラブル':
         query_data = TrainData.query.all()
-        create_reply(query_data)
+        res = create_reply(query_data)
+        reply_text = res['reply_text']
 
     elif len(name_list) != 0:
         length = len(name_list)
-        return_text = '運行状況をお知らせします．\n'
+        reply_text = '運行状況をお知らせします．\n'
         for i in range(length):
             data = db.session.query(TrainData).filter(TrainData.name == name_list[i]).first()
             if (data):
-                return_text += '\n<' + data.name + '>\n' + data.info + '\n'
+                reply_text += '\n<' + data.name + '>\n' + data.info + '\n'
             else:
-                return_text += '\n<' + str(name_list[i]) + '>\n   通常運転\n'
+                reply_text += '\n<' + str(name_list[i]) + '>\n   通常運転\n'
                 
-        return_text += '\n\nお問い合わせの路線の運行状況は以上の通りです．'
+        reply_text += '\n\nお問い合わせの路線の運行状況は以上の通りです．'
 
     elif line_name == 'リスト':
-        return_text = '対応している路線の一覧\n'
+        reply_text = '対応している路線の一覧\n'
         for name in TRAIN_NAME:
-            return_text += '\n' + str(name)
+            reply_text += '\n' + str(name)
 
     else:
-        return_text = 'データにそのような路線はありません．\n運行情報が知りたい路線の名前を送信してください．\nどの路線に対応しているか知りたい場合は「リスト」と送信すると一覧が表示されます．\nまた、「トラブル」と送信すると通常運転ではない路線をお知らせします．'
+        reply_text = 'データにそのような路線はありません．\n運行情報が知りたい路線の名前を送信してください．\nどの路線に対応しているか知りたい場合は「リスト」と送信すると一覧が表示されます．\nまた、「トラブル」と送信すると通常運転ではない路線をお知らせします．'
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=return_text))
+        TextSendMessage(text=reply_text))
 
 
 if __name__ == "__main__":

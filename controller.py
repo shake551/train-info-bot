@@ -40,6 +40,6 @@ def create_reply(query_data):
             return_text += '\n<' + data.name + '>\n' + data.info + '\n'
         return_text += '\n\n通常運転でない路線は以上です．'
     
-    res_json = {'res':return_text}
+    res_json = {'reply_text':return_text}
 
     return json.dumps(res_json, indent=2, ensure_ascii=False)

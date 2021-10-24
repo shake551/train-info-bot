@@ -20,8 +20,8 @@ from linebot.models import (
 
 from config.config import db, app
 from models.train import TrainData
-from controller import obtain_train_data
-from controller import create_reply
+from controllers.delay_train import obtain_train_data
+from controllers.delay_train import create_reply
 
 
 line_bot_api = LineBotApi(os.environ.get('LINEAPI'))

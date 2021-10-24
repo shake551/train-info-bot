@@ -6,3 +6,4 @@ line-bot-sdk
 flask_sqlalchemy
 sqlalchemy
 psycopg2
+python-dotenv

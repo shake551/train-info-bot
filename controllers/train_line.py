@@ -25,6 +25,9 @@ def fetch_all_names():
 def set_line_names():
     res = json.loads(fetch_all_names())
     line_names = res['names']
+
+    db.session.query(TrainLine).delete()
+    
     for line in line_names:
         line_data = TrainLine()
         line_data.name = line

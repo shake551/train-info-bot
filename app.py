@@ -22,14 +22,14 @@ from config.config import db, app
 from models.train import TrainData
 from controllers.delay_train import obtain_train_data
 from controllers.delay_train import create_reply
-from controllers.train_line import obtain_train_data
+from controllers.train_line import obtain_line_names
 
 
 line_bot_api = LineBotApi(os.environ.get('LINEAPI'))
 handler = WebhookHandler(os.environ.get('HANDLER'))
 
 
-TRAIN_NAME = obtain_train_data()
+TRAIN_NAME = obtain_line_names()
 
 
 def set_delay_data():

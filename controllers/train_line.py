@@ -3,7 +3,7 @@ import requests
 from  bs4 import BeautifulSoup
 
 from config.config import db
-from ..models.train import TrainLine
+from models.train import TrainLine
 
 
 def fetch_all_names():

@@ -28,6 +28,7 @@ def set_line_names():
     for line in line_names:
         line_data = TrainLine()
         line_data.name = line
+        db.session.add(line_data)
     db.session.commit()
     
     print('[set_line_names]', res)

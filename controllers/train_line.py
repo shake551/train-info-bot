@@ -34,3 +34,12 @@ def set_line_names():
     print('[set_line_names]', res)
     
     return json.dumps({'message':'ok'}, indent=2, ensure_ascii=False)
+
+def obtain_line_names():
+    name_query = db.session.query(TrainLine).all()
+    train_names = []
+    for name in name_query:
+        train_names.append(name.name)
+    print(train_names)
+
+    return train_names

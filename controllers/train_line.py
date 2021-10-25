@@ -30,4 +30,6 @@ def set_line_names():
         line_data.name = line
     db.session.commit()
     
+    print('[set_line_names]', res)
+    
     return json.dumps({'message':'ok'}, indent=2, ensure_ascii=False)

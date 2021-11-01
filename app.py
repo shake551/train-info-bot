@@ -28,12 +28,12 @@ from controllers.train import obtain_line_names
 line_bot_api = LineBotApi(os.environ.get('LINEAPI'))
 handler = WebhookHandler(os.environ.get('HANDLER'))
 
-
+URL = 'https://transit.yahoo.co.jp/diainfo/area/6'
 TRAIN_NAME = obtain_line_names()
 
 
 def set_delay_data():
-    train_info_api = TrainInfoAPI()
+    train_info_api = TrainInfoAPI(URL)
     res = json.loads(train_info_api.fetch_delay_train())
     delay_info = res['delay_info']
     # 一旦データを全て消す

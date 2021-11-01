@@ -7,12 +7,11 @@ from models.train import TrainLine
 
 
 class TrainInfoAPI():
-    def __init__(self):
-        print('init')
+    def __init__(self, url):
+        self.url = url
 
     def fetch_train_data(self, option=0):
-        URL = 'https://transit.yahoo.co.jp/diainfo/area/6'
-        html = requests.get(URL)
+        html = requests.get(self.url)
         soup = BeautifulSoup(html.content, 'html.parser')
         train_map = soup.find_all('dd')
         
@@ -72,7 +71,8 @@ def create_reply(query_data):
 
 
 def set_line_names():
-    train_info_api = TrainInfoAPI()
+    URL = 'https://transit.yahoo.co.jp/diainfo/area/6'
+    train_info_api = TrainInfoAPI(URL)
     res = json.loads(train_info_api.fetch_all_names())
     line_names = res['names']
 

@@ -20,9 +20,9 @@ from linebot.models import (
 
 from config.config import db, app
 from models.train import TrainData
-from controllers.delay_train import obtain_train_data
-from controllers.delay_train import create_reply
-from controllers.train_line import obtain_line_names
+from controllers.train import TrainInfoAPI
+from controllers.train import create_reply
+from controllers.train import obtain_line_names
 
 
 line_bot_api = LineBotApi(os.environ.get('LINEAPI'))
@@ -33,7 +33,8 @@ TRAIN_NAME = obtain_line_names()
 
 
 def set_delay_data():
-    res = json.loads(obtain_train_data())
+    train_info_api = TrainInfoAPI()
+    res = json.loads(train_info_api.fetch_delay_train())
     delay_info = res['delay_info']
     # 一旦データを全て消す
     db.session.query(TrainData).delete()

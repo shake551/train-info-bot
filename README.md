@@ -2,6 +2,11 @@
 
 ## 概要
 電車の運行情報をスクレイピングして、LINEで通知してくれるボットです
+
+こちらのQRコードから友達登録できます．IDは`@262hlvbr`です．
+
+<img width="150" alt="スクリーンショット 2022-03-18 23 08 00" src="https://user-images.githubusercontent.com/73379887/159018370-cd1c307e-5059-4eee-ad4d-92f9519b6e91.png">
+
 #### 詳細は[こちら](https://shake551.github.io/portfolio/train.html)からご確認ください
 
 ## 動機
